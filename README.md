@@ -17,9 +17,9 @@ Follow these quick steps to download and run this calculator on your machine:
 ### 1. Clone the Repository
 Open your terminal and clone the project:
 git clone [https://github.com/AdityaPatil0995/Flask-Calculator.git](https://github.com/AdityaPatil0995/Flask-Calculator.git)
-2. Move into the Folder
+### 2. Move into the Folder
 Navigate inside the downloaded directory: cd Flask-Calculator
-3. Start the Flask Server
+### 3. Start the Flask Server
 Run the application script: python app.py
-4. Open in Browser
+### 4. Open in Browser
 Ctrl + Click the local host link generated in your terminal: [http://127.0.0.1:5000](http://127.0.0.1:5000)
