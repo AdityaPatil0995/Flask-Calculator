@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavender Standard Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #16141f; /* Deep dark purple-toned gray desktop background */
+        }
+
+        /* Windows 11 Frame wrapped in elegant dark plum-slate */
+        .calculator {
+            background-color: #1f1c2c; 
+            width: 360px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #2d293d;
+            box-shadow: 0px 12px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Header matching the image layout */
+        .header {
+            display: flex;
+            align-items: center;
+            color: #e2dbf0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding: 8px 4px 20px 4px;
+        }
+
+        .header-menu {
+            margin-right: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #b3a7d4;
+        }
+
+        /* Large Screen Area */
+        .display-container {
+            width: 100%;
+            text-align: right;
+            padding: 0 8px 12px 8px;
+        }
+
+        .display {
+            background: #171522;
+            color: #ffffff;
+            width: 100%;
+            height: 85px;
+            border: 1px solid #2d293d;
+            border-radius: 6px;
+            text-align: right;
+            padding: 16px;
+            font-size: 3rem;
+            font-weight: 600;
+            outline: none;
+        }
+
+        /* Subtle Memory Button Row */
+        .memory-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4px 12px 4px;
+        }
+
+        .mem-btn {
+            background: transparent;
+            border: none;
+            color: #8c82a6;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .mem-btn:hover {
+            color: #ffffff;
+        }
+
+        /* Exact Layout Grid spacing matching your layout image */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3px; 
+        }
+
+        button {
+            height: 54px;
+            font-size: 1.1rem;
+            color: #ffffff;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.08s ease, transform 0.05s ease;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        /* Regular Number Keys: Soothing Soft Lavender */
+        .num-btn {
+            background-color: #b39ddb; 
+            color: #1a1525;
+            font-weight: 600;
+        }
+
+        .num-btn:hover {
+            background-color: #c1aee6;
+        }
+
+        /* Top & Side Functions: Rich Deep Lavender / Amethyst */
+        .func-btn {
+            background-color: #7e57c2; 
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .func-btn:hover {
+            background-color: #9575cd;
+        }
+
+        /* Dynamic Equal Button: Striking Neon Lilac Accent Key */
+        button.equal {
+            background-color: #d500f9; 
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        button.equal:hover {
+            background-color: #df33ff;
+            box-shadow: 0 0 12px rgba(213, 0, 249, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <div class="header">
+            <span class="header-menu">☰</span>
+            <span>Calculator</span>
+        </div>
+
+        <form method="POST" action="/">
+            <input type="hidden" id="expression" name="expression" value="{{ expression }}">
+            
+            <div class="display-container">
+                <input type="text" class="display" id="screen" 
+                       value="{% if result %}{{ result }}{% elif expression %}{{ expression }}{% else %}0{% endif %}" readonly>
+            </div>
+
+            <div class="memory-row">
+                <span class="mem-btn">MC</span>
+                <span class="mem-btn">MR</span>
+                <span class="mem-btn">M+</span>
+                <span class="mem-btn">M-</span>
+                <span class="mem-btn">MS</span>
+                <span class="mem-btn">M▾</span>
+            </div>
+            
+            <div class="buttons">
+                <button type="button" onclick="appendValue('%')" class="func-btn">%</button>
+                <button type="submit" name="clear" class="func-btn">CE</button>
+                <button type="submit" name="clear" class="func-btn">C</button>
+                <button type="button" onclick="backspace()" class="func-btn">⌫</button>
+                
+                <button type="button" onclick="appendValue('1/')" class="func-btn">¹/x</button>
+                <button type="button" onclick="appendValue('**2')" class="func-btn">x²</button>
+                <button type="button" onclick="appendValue('**0.5')" class="func-btn">²√x</button>
+                <button type="button" onclick="appendValue('/')" class="func-btn">÷</button>
+                
+                <button type="button" onclick="appendValue('7')" class="num-btn">7</button>
+                <button type="button" onclick="appendValue('8')" class="num-btn">8</button>
+                <button type="button" onclick="appendValue('9')" class="num-btn">9</button>
+                <button type="button" onclick="appendValue('*')" class="func-btn">×</button>
+                
+                <button type="button" onclick="appendValue('4')" class="num-btn">4</button>
+                <button type="button" onclick="appendValue('5')" class="num-btn">5</button>
+                <button type="button" onclick="appendValue('6')" class="num-btn">6</button>
+                <button type="button" onclick="appendValue('-')" class="func-btn">-</button>
+                
+                <button type="button" onclick="appendValue('1')" class="num-btn">1</button>
+                <button type="button" onclick="appendValue('2')" class="num-btn">2</button>
+                <button type="button" onclick="appendValue('3')" class="num-btn">3</button>
+                <button type="button" onclick="appendValue('+')" class="func-btn">+</button>
+                
+                <button type="button" onclick="toggleSign()" class="num-btn">+/-</button>
+                <button type="button" onclick="appendValue('0')" class="num-btn">0</button>
+                <button type="button" onclick="appendValue('.')" class="num-btn">.</button>
+                <button type="submit" name="equal" class="equal">=</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const screen = document.getElementById('screen');
+        const expressionInput = document.getElementById('expression');
+        let resetScreen = false;
+
+        function appendValue(value) {
+            if (screen.value === "Error" || screen.value === "0" || resetScreen) {
+                if(screen.value === "0" && !isNaN(value)) {
+                    screen.value = "";
+                    expressionInput.value = "";
+                } else if (resetScreen) {
+                    screen.value = "";
+                    expressionInput.value = "";
+                    resetScreen = false;
+                }
+            }
+            expressionInput.value += value;
+            screen.value = expressionInput.value.replace(/\*\*/g, '^').replace(/\*/g, '×').replace(/\//g, '÷');
+        }
+
+        function backspace() {
+            expressionInput.value = expressionInput.value.slice(0, -1);
+            screen.value = expressionInput.value.replace(/\*\*/g, '^').replace(/\*/g, '×').replace(/\//g, '÷');
+            if (expressionInput.value === "") {
+                screen.value = "0";
+            }
+        }
+
+        function toggleSign() {
+            if(expressionInput.value) {
+                if(expressionInput.value.startsWith('-')) {
+                    expressionInput.value = expressionInput.value.substring(1);
+                } else {
+                    expressionInput.value = '-' + expressionInput.value;
+                }
+                screen.value = expressionInput.value;
+            }
+        }
+
+        {% if result %}
+        resetScreen = true;
+        {% endif %}
+    </script>
+</body>
+</html>
